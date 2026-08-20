@@ -2,6 +2,7 @@ mod error;
 mod pipeline;
 mod pool;
 mod runtime;
+mod tokio_bridge;
 
 #[cfg(test)]
 mod tests;
@@ -209,8 +210,9 @@ impl UniversalRead for IoUringFile {
         access_pattern: P,
         align: usize,
     ) -> UioResult<ACow<'_>> {
-        // TODO(uio): implement real async
-        self.read_bytes(range, access_pattern, align)
+        Ok(ACow::Owned(
+            tokio_bridge::read_bytes_async(self, range, align).await?,
+        ))
     }
 
     fn len<T>(&self) -> UioResult<u64> {
