@@ -207,7 +207,7 @@ impl UniversalRead for IoUringFile {
     async fn read_bytes_async<P: AccessPattern>(
         &self,
         range: Range<u64>,
-        access_pattern: P,
+        _access_pattern: P,
         align: usize,
     ) -> UioResult<ACow<'_>> {
         Ok(ACow::Owned(
